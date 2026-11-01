@@ -14,6 +14,13 @@ $delivered = mysqli_fetch_assoc($delivered_query)['count'];
 
 // Fetch recent parcels for the table
 $recent_query = mysqli_query($conn, "SELECT * FROM parcels ORDER BY created_at DESC LIMIT 5");
+
+// Fetch data for the analytics chart
+$status_query = mysqli_query($conn, "SELECT status, COUNT(*) as count FROM parcels GROUP BY status");
+$chart_data = [];
+while ($row = mysqli_fetch_assoc($status_query)) {
+    $chart_data[$row['status']] = $row['count'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -86,6 +93,24 @@ $recent_query = mysqli_query($conn, "SELECT * FROM parcels ORDER BY created_at D
                     <?php endwhile; ?>
                 </tbody>
             </table>
+        </div>
+
+        <!-- ANALYTICS CHART -->
+        <div style="background: #112431; border-radius: 12px; padding: 20px;">
+            <h3 style="margin-bottom: 15px; color: #00d2ff;">📊 Analytics</h3>
+            <div style="display: flex; align-items: flex-end; height: 150px; gap: 20px; padding-top: 20px;">
+                <?php 
+                $max_count = count($chart_data) > 0 ? max($chart_data) : 0;
+                foreach($chart_data as $status => $count): 
+                    $height = $max_count > 0 ? ($count / $max_count) * 100 : 10; 
+                ?>
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%;">
+                        <div style="background: #0082c8; width: 100%; height: <?php echo $height; ?>%; border-radius: 5px 5px 0 0;"></div>
+                        <p style="margin-top: 10px; font-size: 12px;"><?php echo $status; ?></p>
+                        <p style="font-size: 14px; font-weight: bold;"><?php echo $count; ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
         
     </div>
