@@ -131,3 +131,12 @@ td {
 .btn-done { background: #00b04f; }
 .btn-transit:hover { background: #00d2ff; }
 .btn-done:hover { background: #00e066; }
+
+/* ==================== DELETE BUTTON ==================== */
+.btn-delete { 
+    background: #ff4d4d; 
+    color: white;
+}
+.btn-delete:hover { 
+    background: #cc0000; 
+}

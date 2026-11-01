@@ -66,6 +66,9 @@ $query = mysqli_query($conn, "SELECT * FROM parcels ORDER BY created_at DESC");
                             <?php if($row['status'] != 'Delivered'): ?>
                                 <a href="update_status.php?id=<?php echo $row['id']; ?>&status=Delivered" class="action-btn btn-done">✅ Done</a>
                             <?php endif; ?>
+
+                            <!-- NEW DELETE BUTTON -->
+                            <a href="delete.php?id=<?php echo $row['id']; ?>" class="action-btn btn-delete" onclick="return confirm('Are you sure you want to delete this parcel?');">🗑️ Delete</a>
                         </td>
                     </tr>
                     <?php endwhile; ?>
