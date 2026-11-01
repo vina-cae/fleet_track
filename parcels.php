@@ -1,6 +1,12 @@
 <?php
 include 'db.php';
+session_start();
 
+// Check if user is logged in
+if (!isset($_SESSION['user'])) {
+    header("Location: index.php");
+    exit();
+}
 // Fetch all parcels from the database
 $query = mysqli_query($conn, "SELECT * FROM parcels ORDER BY created_at DESC");
 ?>

@@ -1,7 +1,14 @@
 <?php
 // ==================== DATABASE CONNECTION ====================
 include 'db.php';
+session_start();
 
+// Check if user is logged in
+if (!isset($_SESSION['user'])) {
+    header("Location: index.php");
+    exit();
+} 
+?>
 // ==================== CHECK IF ID AND STATUS EXIST IN URL ====================
 if (isset($_GET['id']) && isset($_GET['status'])) {
     

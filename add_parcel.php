@@ -1,3 +1,13 @@
+<?php
+include 'db.php';
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user'])) {
+    header("Location: index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,9 +22,9 @@
         <h2>🚚 Fleet</h2>
         <a href="dashboard.php">🏠 Dashboard</a>
         <a href="add_parcel.php" class="active">📦 Add Parcel</a>
-        <a href="#">📋 Parcels</a>
-        <a href="#">📍 Track</a>
-        <a href="#">🚪 Logout</a>
+        <a href="parcels.php">📋 Parcels</a>
+        <a href="track.php">📍 Track</a>
+        <a href="logout.php">🚪 Logout</a>
     </div>
 
     <!-- MAIN CONTENT -->

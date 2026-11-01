@@ -1,7 +1,13 @@
 <?php
 // ==================== DATABASE CONNECTION ====================
 include 'db.php';
+session_start();
 
+// Check if user is logged in
+if (!isset($_SESSION['user'])) {
+    header("Location: index.php");
+    exit();
+}
 // ==================== FETCH STATISTICS ====================
 $total_query = mysqli_query($conn, "SELECT COUNT(*) as count FROM parcels");
 $total_parcels = mysqli_fetch_assoc($total_query)['count'];
