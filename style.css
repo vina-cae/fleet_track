@@ -19,3 +19,69 @@ body { background-color: #0b1a24; color: white; display: flex; }
 .card-blue { background: linear-gradient(135deg, #0082c8, #005c8a); }
 .card-orange { background: linear-gradient(135deg, #ff7e00, #cc6500); }
 .card-green { background: linear-gradient(135deg, #00b04f, #008a3e); }
+
+/* ==================== ADD PARCEL FORM ==================== */
+.form-container {
+    background: #0a151e;
+    border: 1px solid #00d2ff;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #00d2ff;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #8ba3b5;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    background: #112431;
+    border: 1px solid #1a364a;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #00d2ff;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    flex: 1;
+}
+
+.btn-blue { background: #0082c8; }
+.btn-orange { background: #ff7e00; }
+.btn-gray { background: #5a6b7a; }
+
+.btn:hover { opacity: 0.8; }

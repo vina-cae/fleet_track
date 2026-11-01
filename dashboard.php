@@ -36,7 +36,7 @@ while ($row = mysqli_fetch_assoc($status_query)) {
     <div class="sidebar">
         <h2>🚚 Fleet</h2>
         <a href="dashboard.php" class="active">🏠 Dashboard</a>
-        <a href="#">📦 Add Parcel</a>
+        <a href="add_parcel.php">📦 Add Parcel</a>
         <a href="#">📋 Parcels</a>
         <a href="#">📍 Track</a>
         <a href="#">🚪 Logout</a>
