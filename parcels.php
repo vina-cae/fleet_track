@@ -20,8 +20,8 @@ $query = mysqli_query($conn, "SELECT * FROM parcels ORDER BY created_at DESC");
         <a href="dashboard.php">🏠 Dashboard</a>
         <a href="add_parcel.php">📦 Add Parcel</a>
         <a href="parcels.php" class="active">📋 Parcels</a>
-        <a href="#">📍 Track</a>
-        <a href="#">🚪 Logout</a>
+        <a href="track.php">📍 Track</a>
+        <a href="logout.php">🚪 Logout</a>
     </div>
 
     <!-- MAIN CONTENT -->

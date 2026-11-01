@@ -38,8 +38,8 @@ while ($row = mysqli_fetch_assoc($status_query)) {
         <a href="dashboard.php" class="active">🏠 Dashboard</a>
         <a href="add_parcel.php">📦 Add Parcel</a>
         <a href="parcels.php">📋 Parcels</a>      
-        <a href="#">📍 Track</a>
-        <a href="#">🚪 Logout</a>
+        <a href="track.php">📍 Track</a>
+        <a href="logout.php">🚪 Logout</a>
     </div>
 
     <!-- MAIN CONTENT -->
