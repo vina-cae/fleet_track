@@ -1,7 +1,13 @@
 <?php
 // ==================== DATABASE CONNECTION ====================
 include 'db.php';
+session_start();
 
+// STRICT SECURITY CHECK
+if (!isset($_SESSION['user'])) {
+    header("Location: index.php");
+    exit();
+}
 // ==================== CHECK IF FORM IS SUBMITTED ====================
 if (isset($_POST['sender'])) {
     

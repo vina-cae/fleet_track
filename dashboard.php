@@ -71,7 +71,7 @@ while ($row = mysqli_fetch_assoc($status_query)) {
         </div>
 
         <!-- RECENT PARCELS TABLE -->
-        <div style="background: #112431; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+        <div style="background: #112431; border-radius: 12px; padding: 20px; margin-bottom: 30px; margin-top: 30px;">
             <h3 style="margin-bottom: 15px; color: #00d2ff;">📋 Recent Parcels</h3>
             <table style="width: 100%; border-collapse: collapse; text-align: left;">
                 <thead>

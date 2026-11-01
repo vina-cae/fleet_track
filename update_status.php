@@ -7,7 +7,7 @@ session_start();
 if (!isset($_SESSION['user'])) {
     header("Location: index.php");
     exit();
-} 
+}
 ?>
 // ==================== CHECK IF ID AND STATUS EXIST IN URL ====================
 if (isset($_GET['id']) && isset($_GET['status'])) {

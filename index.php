@@ -2,6 +2,14 @@
 include 'db.php';
 session_start();
 
+// If the URL has ?logout=1, destroy the session so they MUST log in again
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
+
+// If admin is already logged in, go to dashboard
 if (isset($_SESSION['user'])) {
     header("Location: dashboard.php");
     exit();
@@ -20,7 +28,7 @@ if (isset($_POST['login'])) {
         header("Location: dashboard.php");
         exit();
     } else {
-        $error = "Invalid username or password!";
+        $error = "Invalid admin credentials!";
     }
 }
 ?>
@@ -29,13 +37,13 @@ if (isset($_POST['login'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Fleet Track</title>
+    <title>Admin Login - Fleet Track</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #0b1a24;">
 
     <div class="form-container" style="width: 400px; background: #0a151e;">
-        <h2>🚚 Fleet Track Login</h2>
+        <h2>🔐 Admin Login</h2>
         
         <?php if($error): ?>
             <div style="background: #ff4d4d; color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 14px;">
@@ -43,7 +51,6 @@ if (isset($_POST['login'])) {
             </div>
         <?php endif; ?>
 
-        <!-- Added autocomplete="off" to prevent browser autofill -->
         <form method="POST" action="index.php" autocomplete="off">
             <div class="form-group">
                 <label>Username</label>
@@ -52,7 +59,6 @@ if (isset($_POST['login'])) {
             
             <div class="form-group">
                 <label>Password</label>
-                <!-- Added autocomplete="new-password" to specifically stop the dots from appearing -->
                 <input type="password" name="password" placeholder="Enter password" required autocomplete="new-password">
             </div>
 
