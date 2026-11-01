@@ -1,18 +1,17 @@
 <?php
 include 'db.php';
 
-// NO SESSION START. This page is fully public.
-
 $parcel = null;
 $error = "";
 
 if (isset($_GET['track_code'])) {
     $code = mysqli_real_escape_string($conn, $_GET['track_code']);
-    
+
     if (empty($code)) {
         $error = "Please enter a tracking code.";
     } else {
         $query = mysqli_query($conn, "SELECT * FROM parcels WHERE tracking_code = '$code' LIMIT 1");
+
         if (mysqli_num_rows($query) > 0) {
             $parcel = mysqli_fetch_assoc($query);
         } else {
@@ -21,78 +20,168 @@ if (isset($_GET['track_code'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Track Your Parcel - Fleet Track</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Parcel - Fleet Track</title>
+    <link rel="stylesheet" href="track-style.css">
+    
+    <!-- LEAFLET MAP -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
-<body style="display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; background-color: #0b1a24; padding-top: 80px;">
+<body class="theme-blue"> <!-- DEFAULT THEME -->
 
-    <!-- NO SIDEBAR. Full width centered content. -->
-    <div style="width: 100%; max-width: 700px;">
-        
-        <div style="text-align: center; margin-bottom: 40px;">
-            <h1 style="color: #00d2ff; font-size: 36px; margin-bottom: 10px;">🚚 Fleet Track</h1>
-            <p style="color: #8ba3b5; font-size: 16px;">Enter your tracking code below to check your parcel status.</p>
+<div class="container">
+    
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-brand">
+            <h1>Fleet Track</h1>
+            <p class="tagline">Your package, our priority.</p>
         </div>
-
-        <!-- SEARCH FORM -->
-        <div class="form-container" style="margin-bottom: 30px; background: #0a151e;">
-            <form method="GET" action="track.php" style="display: flex; gap: 15px; align-items: center;">
-                <input type="text" name="track_code" placeholder="Enter Tracking Code (e.g. TRK-XXXXXX)" style="flex: 1; margin: 0; font-size: 16px; padding: 15px; border-radius: 8px;">
-                <button type="submit" class="btn btn-blue" style="flex: 0 0 auto; padding: 15px 35px; margin: 0; font-size: 16px;">Search</button>
-            </form>
+        <div class="theme-control">
+            <button type="button" id="blueBtn" class="theme-btn active" onclick="setTheme('blue')">Blue Theme</button>
+            <button type="button" id="pinkBtn" class="theme-btn" onclick="setTheme('pink')">Pink Theme</button>
+            <a href="index.php?logout=1" class="admin-btn">Admin Login</a>
         </div>
-
-        <!-- ERROR MESSAGE -->
-        <?php if ($error): ?>
-            <div style="background: rgba(255, 77, 77, 0.2); border: 1px solid #ff4d4d; color: #ff4d4d; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 30px;">
-                <?php echo $error; ?>
-            </div>
-        <?php endif; ?>
-
-        <!-- RESULT -->
-        <?php if ($parcel): ?>
-            <div class="table-container" style="background: #0a151e; box-shadow: 0 8px 32px rgba(0, 210, 255, 0.15);">
-                <h3 style="color: #00d2ff; margin-bottom: 20px; text-align: center;">Parcel Details: <?php echo $parcel['tracking_code']; ?></h3>
-                <table>
-                    <tr>
-                        <td style="text-align: left; font-weight: bold; width: 30%; color: #8ba3b5;">Sender:</td>
-                        <td style="text-align: left; font-size: 16px;"><?php echo $parcel['sender']; ?></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; font-weight: bold; color: #8ba3b5;">Receiver:</td>
-                        <td style="text-align: left; font-size: 16px;"><?php echo $parcel['receiver']; ?></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; font-weight: bold; color: #8ba3b5;">Origin:</td>
-                        <td style="text-align: left; font-size: 16px;"><?php echo $parcel['origin']; ?></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; font-weight: bold; color: #8ba3b5;">Destination:</td>
-                        <td style="text-align: left; font-size: 16px;"><?php echo $parcel['destination']; ?></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; font-weight: bold; color: #8ba3b5;">Status:</td>
-                        <td style="text-align: left; font-weight: bold; font-size: 18px;">
-                            <span style="color: <?php echo $parcel['status'] == 'Delivered' ? '#00b04f' : ($parcel['status'] == 'Transit' ? '#00d2ff' : '#ff7e00'); ?>;">
-                                <?php echo $parcel['status']; ?>
-                            </span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        <?php endif; ?>
-
-        <!-- ADMIN LOGIN LINK AT BOTTOM -->
-        <div style="text-align: center; margin-top: 50px;">
-            <a href="index.php?logout=1" style="color: #5a6b7a; text-decoration: none; font-size: 14px;">Admin Login &rarr;</a>
-        </div>
-
     </div>
+
+    <!-- SEARCH PANEL -->
+    <div class="panel">
+        <h3 style="margin-bottom: 20px; margin-left: -5px; text-align: center; letter-spacing: 2px;" class="accent-text">Track Your Parcel</h3>
+        <form action="track.php" method="GET" class="search-form">
+            <input type="text" name="track_code" placeholder="Enter Tracking Code (e.g. TRK-XXXXXX)" value="<?php if(isset($_GET['track_code'])) echo htmlspecialchars($_GET['track_code']); ?>" required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- ERROR MESSAGE -->
+    <?php if ($error != ""): ?>
+        <div class="error-msg">
+            <?php echo htmlspecialchars($error); ?>
+        </div>
+    <?php endif; ?>
+
+    <!-- RESULT SECTION -->
+    <?php if ($parcel): ?>
+        <div class="panel">
+            <h3 style="margin-bottom: 15px;" class="accent-text">Parcel Details: <?php echo htmlspecialchars($parcel['tracking_code']); ?></h3>
+            
+            <div class="result-grid">
+                
+                <div class="result-item">
+                    <small>Status</small>
+                    <div class="status-badge"><?php echo htmlspecialchars($parcel['status']); ?></div>
+                </div>
+
+                <div class="result-item">
+                    <small>Sender</small>
+                    <h3><?php echo htmlspecialchars($parcel['sender']); ?></h3>
+                </div>
+
+                <div class="result-item">
+                    <small>Receiver</small>
+                    <h3><?php echo htmlspecialchars($parcel['receiver']); ?></h3>
+                </div>
+
+                <div class="result-item">
+                    <small>Weight</small>
+                    <h3><?php echo htmlspecialchars($parcel['weight']); ?> kg</h3>
+                </div>
+
+                <div class="result-item">
+                    <small>Origin</small>
+                    <p><?php echo htmlspecialchars($parcel['origin']); ?></p>
+                </div>
+
+                <div class="result-item">
+                    <small>Destination</small>
+                    <p><?php echo htmlspecialchars($parcel['destination']); ?></p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MAP SECTION -->
+        <div class="panel">
+            <h3 style="margin-bottom: 15px;" class="accent-text">Parcel Location</h3>
+            <div id="map"></div>
+        </div>
+    <?php endif; ?>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>© <?php echo date("Y"); ?> Fleet Track | Parcel Tracking System</p>
+    </div>
+
+</div>
+
+<script>
+    // ==================== THEME SWITCHER ====================
+    function setTheme(theme) {
+        const body = document.body;
+        const blueBtn = document.getElementById('blueBtn');
+        const pinkBtn = document.getElementById('pinkBtn');
+
+        body.classList.remove('theme-blue', 'theme-pink');
+        blueBtn.classList.remove('active');
+        pinkBtn.classList.remove('active');
+
+        if (theme === 'pink') {
+            body.classList.add('theme-pink');
+            pinkBtn.classList.add('active');
+            localStorage.setItem('fleetTheme', 'pink');
+        } else {
+            body.classList.add('theme-blue');
+            blueBtn.classList.add('active');
+            localStorage.setItem('fleetTheme', 'blue');
+        }
+    }
+
+    const savedTheme = localStorage.getItem('fleetTheme');
+    if (savedTheme === 'pink') {
+        setTheme('pink');
+    }
+
+    // ==================== MAP ====================
+    <?php if ($parcel): ?>
+    const originCity = "<?php echo $parcel['origin']; ?>";
+    const destCity = "<?php echo $parcel['destination']; ?>";
+
+    const map = L.map('map').setView([12.8797, 121.7740], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    async function getCoords(city) {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`);
+        const data = await res.json();
+        return data.length > 0 ? [parseFloat(data[0].lat), parseFloat(data[0].lon)] : null;
+    }
+
+    async function drawMap() {
+        const origin = await getCoords(originCity);
+        const dest = await getCoords(destCity);
+
+        if (origin && dest) {
+            L.circleMarker(origin, { radius: 8, color: '#fff', fillColor: '#00b04f', fillOpacity: 1, weight: 2 })
+             .addTo(map).bindPopup('Origin: ' + originCity).openPopup();
+
+            L.circleMarker(dest, { radius: 8, color: '#fff', fillColor: '#db2777', fillOpacity: 1, weight: 2 })
+             .addTo(map).bindPopup('Destination: ' + destCity);
+
+            L.polyline([origin, dest], { color: '#38bdf8', weight: 3, dashArray: '5, 5' }).addTo(map);
+
+            const bounds = L.latLngBounds([origin, dest]);
+            map.fitBounds(bounds, { padding: [50, 50] });
+        }
+    }
+    setTimeout(drawMap, 500);
+    <?php endif; ?>
+</script>
 
 </body>
 </html>

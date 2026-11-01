@@ -2,7 +2,6 @@
 include 'db.php';
 session_start();
 
-// If the URL has ?logout=1, destroy the session so they MUST log in again
 if (isset($_GET['logout'])) {
     session_destroy();
     header("Location: index.php");
