@@ -11,6 +11,9 @@ $in_transit = mysqli_fetch_assoc($transit_query)['count'];
 
 $delivered_query = mysqli_query($conn, "SELECT COUNT(*) as count FROM parcels WHERE status='Delivered'");
 $delivered = mysqli_fetch_assoc($delivered_query)['count'];
+
+// Fetch recent parcels for the table
+$recent_query = mysqli_query($conn, "SELECT * FROM parcels ORDER BY created_at DESC LIMIT 5");
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +56,38 @@ $delivered = mysqli_fetch_assoc($delivered_query)['count'];
                 <p><?php echo $delivered; ?></p>
             </div>
         </div>
-    </div>
 
+        <!-- RECENT PARCELS TABLE -->
+        <div style="background: #112431; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+            <h3 style="margin-bottom: 15px; color: #00d2ff;">📋 Recent Parcels</h3>
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background: #0082c8; color: white;">
+                        <th style="padding: 12px; border-radius: 8px 0 0 8px;">Tracking</th>
+                        <th style="padding: 12px;">Sender</th>
+                        <th style="padding: 12px;">Receiver</th>
+                        <th style="padding: 12px;">Status</th>
+                        <th style="padding: 12px; border-radius: 0 8px 8px 0;">Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while($row = mysqli_fetch_assoc($recent_query)): ?>
+                    <tr style="border-bottom: 1px solid #1a364a;">
+                        <td style="padding: 12px;"><?php echo $row['tracking_code']; ?></td>
+                        <td style="padding: 12px;"><?php echo $row['sender']; ?></td>
+                        <td style="padding: 12px;"><?php echo $row['receiver']; ?></td>
+                        <td style="padding: 12px;">
+                            <span style="color: <?php echo $row['status'] == 'Delivered' ? '#00b04f' : '#ff7e00'; ?>;">
+                                <?php echo $row['status']; ?>
+                            </span>
+                        </td>
+                        <td style="padding: 12px;"><?php echo date('d M Y, h:i A', strtotime($row['created_at'])); ?></td>
+                    </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
 </body>
 </html>
