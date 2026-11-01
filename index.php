@@ -66,6 +66,10 @@ if (isset($_POST['login'])) {
                 <button type="submit" name="login" class="btn btn-blue">Login</button>
             </div>
         </form>
+
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="track.php" style="color: #00d2ff; text-decoration: none; font-size: 14px; font-weight: bold;">📍 Go to Public Tracking Page &rarr;</a>
+        </div>
         
         <p style="text-align: center; margin-top: 20px; font-size: 12px; color: #8ba3b5;">
             Use: <b>admin</b> / <b>admin123</b>
