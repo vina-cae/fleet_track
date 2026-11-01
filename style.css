@@ -140,3 +140,46 @@ td {
 .btn-delete:hover { 
     background: #cc0000; 
 }
+
+/* ==================== POLISH & AESTHETICS ==================== */
+.sidebar {
+    padding: 30px 20px; /* Better top spacing */
+}
+
+.sidebar a {
+    margin-bottom: 8px; /* Better spacing between links */
+}
+
+/* Dashboard Table Hover */
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+tbody tr:hover {
+    background-color: #1a364a;
+}
+
+/* Make tracking codes bold */
+td:first-child {
+    font-weight: bold;
+    color: #00d2ff;
+}
+
+/* Fix the Add Parcel Back Button */
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #8ba3b5;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+.back-link:hover {
+    color: white;
+}
+
+/* Add a subtle glow to the login and add parcel forms */
+.form-container {
+    box-shadow: 0 8px 32px rgba(0, 210, 255, 0.15);
+    border: 1px solid rgba(0, 210, 255, 0.3);
+}

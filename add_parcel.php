@@ -1,13 +1,3 @@
-<?php
-include 'db.php';
-session_start();
-
-// Check if user is logged in
-if (!isset($_SESSION['user'])) {
-    header("Location: index.php");
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +7,6 @@ if (!isset($_SESSION['user'])) {
 </head>
 <body>
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <h2>🚚 Fleet</h2>
         <a href="dashboard.php">🏠 Dashboard</a>
@@ -27,10 +16,9 @@ if (!isset($_SESSION['user'])) {
         <a href="logout.php">🚪 Logout</a>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-        <div class="form-container">
-            <h2>📦 Add Parcel</h2>
+    <div class="main-content" style="display: flex; justify-content: center; align-items: flex-start;">
+        <div class="form-container" style="width: 100%; max-width: 600px;">
+            <h2 style="text-align: center; color: #00d2ff;">📦 Add Parcel</h2>
             
             <form action="save_parcel.php" method="POST">
                 <div class="form-group">
@@ -58,14 +46,13 @@ if (!isset($_SESSION['user'])) {
                     <input type="number" step="0.01" name="weight" placeholder="Enter weight" required>
                 </div>
 
-                <div class="btn-group">
+                <div class="btn-group" style="margin-bottom: 10px;">
                     <button type="submit" class="btn btn-blue">+ Add Parcel</button>
                     <button type="reset" class="btn btn-orange">✏️ Clear</button>
                 </div>
                 
-                <div class="btn-group">
-                    <a href="dashboard.php" class="btn btn-gray">⬅ Back to Dashboard</a>
-                </div>
+                <!-- Replaced the massive gray button with a sleek text link -->
+                <a href="dashboard.php" class="back-link">⬅ Back to Dashboard</a>
             </form>
         </div>
     </div>
