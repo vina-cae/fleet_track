@@ -1,5 +1,4 @@
 <?php
-include 'db.php';
 session_start();
 
 // Check if user is logged in
@@ -7,73 +6,63 @@ if (!isset($_SESSION['user'])) {
     header("Location: index.php");
     exit();
 }
-// Fetch all parcels from the database
-$query = mysqli_query($conn, "SELECT * FROM parcels ORDER BY created_at DESC");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>All Parcels - Fleet Track</title>
+    <title>Add Parcel - Fleet Track</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <h2>🚚 Fleet</h2>
         <a href="dashboard.php">🏠 Dashboard</a>
-        <a href="add_parcel.php">📦 Add Parcel</a>
-        <a href="parcels.php" class="active">📋 Parcels</a>
+        <a href="add_parcel.php" class="active">📦 Add Parcel</a>
+        <a href="parcels.php">📋 Parcels</a>
         <a href="track.php">📍 Track</a>
         <a href="logout.php">🚪 Logout</a>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-        <div class="header">
-            <h1>📋 All Parcels</h1>
-        </div>
+    <div class="main-content" style="display: flex; justify-content: center; align-items: flex-start;">
+        <div class="form-container" style="width: 100%; max-width: 600px;">
+            <h2 style="text-align: center; color: #00d2ff;">📦 Add Parcel</h2>
+            
+            <form action="save_parcel.php" method="POST">
+                <div class="form-group">
+                    <label>Sender Name</label>
+                    <input type="text" name="sender" placeholder="Enter sender name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Receiver Name</label>
+                    <input type="text" name="receiver" placeholder="Enter receiver name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Origin City</label>
+                    <input type="text" name="origin" placeholder="Enter origin city" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Destination City</label>
+                    <input type="text" name="destination" placeholder="Enter destination city" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Weight (kg)</label>
+                    <input type="number" step="0.01" name="weight" placeholder="Enter weight" required>
+                </div>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tracking</th>
-                        <th>Sender</th>
-                        <th>Receiver</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while($row = mysqli_fetch_assoc($query)): ?>
-                    <tr>
-                        <td><?php echo $row['tracking_code']; ?></td>
-                        <td><?php echo $row['sender']; ?></td>
-                        <td><?php echo $row['receiver']; ?></td>
-                        <td>
-                            <span style="color: <?php echo $row['status'] == 'Delivered' ? '#00b04f' : ($row['status'] == 'Transit' ? '#00d2ff' : '#ff7e00'); ?>;">
-                                <?php echo $row['status']; ?>
-                            </span>
-                        </td>
-                        <td>
-                            <?php if($row['status'] != 'Transit' && $row['status'] != 'Delivered'): ?>
-                                <a href="update_status.php?id=<?php echo $row['id']; ?>&status=Transit" class="action-btn btn-transit">🚚 Transit</a>
-                            <?php endif; ?>
-                            
-                            <?php if($row['status'] != 'Delivered'): ?>
-                                <a href="update_status.php?id=<?php echo $row['id']; ?>&status=Delivered" class="action-btn btn-done">✅ Done</a>
-                            <?php endif; ?>
-
-                            <!-- NEW DELETE BUTTON -->
-                            <a href="delete.php?id=<?php echo $row['id']; ?>" class="action-btn btn-delete" onclick="return confirm('Are you sure you want to delete this parcel?');">🗑️ Delete</a>
-                        </td>
-                    </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                <div class="btn-group" style="margin-bottom: 10px;">
+                    <button type="submit" class="btn btn-blue">+ Add Parcel</button>
+                    <button type="reset" class="btn btn-orange">✏️ Clear</button>
+                </div>
+                
+                <!-- Replaced the massive gray button with a sleek text link -->
+                <a href="dashboard.php" class="back-link">⬅ Back to Dashboard</a>
+            </form>
         </div>
     </div>
 

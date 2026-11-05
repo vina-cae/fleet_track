@@ -33,7 +33,7 @@ body.theme-blue .result-item {
 body.theme-blue h1, 
 body.theme-blue h3, 
 body.theme-blue .accent-text {
-    color: #38bdf8; /* Solid Light Blue */
+    color: #38bdf8; 
 }
 body.theme-blue .accent-text {
     text-align: center;
@@ -75,7 +75,7 @@ body.theme-pink .result-item {
 body.theme-pink h1, 
 body.theme-pink h3, 
 body.theme-pink .accent-text {
-    color: #f472b6; /* Solid Pastel Pink */
+    color: #f472b6; 
 }
 body.theme-pink .accent-text {
     text-align: center;
